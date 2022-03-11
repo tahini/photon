@@ -1,5 +1,6 @@
 package de.komoot.photon.searcher;
 
+import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -7,6 +8,8 @@ import java.util.Map;
  */
 public interface PhotonResult {
     public double[] INVALID_COORDINATES = new double[]{0, 0};
+
+    public static Comparator<PhotonResult> SCORE_COMPARATOR = Comparator.comparing(PhotonResult::getScore).reversed();
 
     /**
      * Get the value for the given field.

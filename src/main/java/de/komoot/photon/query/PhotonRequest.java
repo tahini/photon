@@ -18,6 +18,7 @@ public class PhotonRequest {
     private int zoom = 14;
     private Envelope bbox = null;
     private boolean debug = false;
+    private int fuzziness = 0;
 
     private final List<TagFilter> osmTagFilters = new ArrayList<>(1);
 
@@ -51,6 +52,10 @@ public class PhotonRequest {
         return zoom;
     }
 
+    public int getFuzziness() {
+        return fuzziness;
+    }
+    
     public String getLanguage() {
         return language;
     }
@@ -69,6 +74,13 @@ public class PhotonRequest {
     PhotonRequest setLimit(Integer limit) {
         if (limit != null) {
             this.limit = Integer.max(Integer.min(limit, 50), 1);
+        }
+        return this;
+    }
+
+    PhotonRequest setFuzziness(Integer fuzziness) {
+        if (fuzziness != null) {
+            this.fuzziness = Integer.max(Integer.min(fuzziness, 2), 0);
         }
         return this;
     }

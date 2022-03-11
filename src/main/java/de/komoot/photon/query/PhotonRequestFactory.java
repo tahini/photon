@@ -17,7 +17,7 @@ public class PhotonRequestFactory {
     private final BoundingBoxParamConverter bboxParamConverter;
 
     private static final HashSet<String> REQUEST_QUERY_PARAMS = new HashSet<>(Arrays.asList("lang", "q", "lon", "lat",
-            "limit", "osm_tag", "location_bias_scale", "bbox", "debug", "zoom"));
+            "limit", "osm_tag", "location_bias_scale", "bbox", "debug", "zoom", "fuzziness"));
 
     public PhotonRequestFactory(List<String> supportedLanguages, String defaultLanguage) {
         this.languageResolver = new RequestLanguageResolver(supportedLanguages, defaultLanguage);
@@ -41,6 +41,7 @@ public class PhotonRequestFactory {
         request.setBbox(bboxParamConverter.apply(webRequest));
         request.setScale(parseDouble(webRequest, "location_bias_scale"));
         request.setZoom(parseInt(webRequest, "zoom"));
+        request.setFuzziness(parseInt(webRequest, "fuzziness"));
 
         if (webRequest.queryParams("debug") != null) {
             request.enableDebug();

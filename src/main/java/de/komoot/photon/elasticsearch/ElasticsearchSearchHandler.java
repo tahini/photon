@@ -11,6 +11,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,12 +39,19 @@ public class ElasticsearchSearchHandler implements SearchHandler {
 
         if (results.getHits().getTotalHits() == 0) {
             results = sendQuery(buildQuery(photonRequest, true).buildQuery(), extLimit);
+        //SearchResponse lenientResults = sendQuery(buildQuery(photonRequest, true).buildQuery(), extLimit);
         }
 
         List<PhotonResult> ret = new ArrayList<>((int) results.getHits().getTotalHits());
         for (SearchHit hit : results.getHits()) {
+            
             ret.add(new ElasticResult(hit));
-        }
+        } 
+       /* for (SearchHit hit : lenientResults.getHits()) {
+            ret.add(new ElasticResult(hit));
+        } */
+
+        Collections.sort(ret, PhotonResult.SCORE_COMPARATOR);
 
         return ret;
     }
@@ -55,7 +63,7 @@ public class ElasticsearchSearchHandler implements SearchHandler {
    public PhotonQueryBuilder buildQuery(PhotonRequest photonRequest, boolean lenient) {
        lastLenient = lenient;
         return PhotonQueryBuilder.
-                builder(photonRequest.getQuery(), photonRequest.getLanguage(), supportedLanguages, lenient).
+                builder(photonRequest.getQuery(), photonRequest.getLanguage(), supportedLanguages, lenient, photonRequest.getFuzziness()).
                 withOsmTagFilters(photonRequest.getOsmTagFilters()).
                 withLocationBias(photonRequest.getLocationForBias(), photonRequest.getScaleForBias(), photonRequest.getZoomForBias()).
                 withBoundingBox(photonRequest.getBbox());

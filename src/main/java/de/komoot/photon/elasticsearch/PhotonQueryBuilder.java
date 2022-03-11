@@ -50,7 +50,7 @@ public class PhotonQueryBuilder {
     protected ArrayList<FilterFunctionBuilder> alFilterFunction4QueryBuilder = new ArrayList<>(1);
 
 
-    private PhotonQueryBuilder(String query, String language, String[] languages, boolean lenient) {
+    private PhotonQueryBuilder(String query, String language, String[] languages, boolean lenient, int fuzziness) {
         BoolQueryBuilder query4QueryBuilder = QueryBuilders.boolQuery();
 
         // 1. All terms of the quey must be contained in the place record somehow. Be more lenient on second try.
@@ -68,7 +68,7 @@ public class PhotonQueryBuilder {
                             .analyzer("search_ngram")
                             .minimumShouldMatch("-1"))
                     .minimumShouldMatch("1");
-        } else {
+        } else if (fuzziness == 0) {
             MultiMatchQueryBuilder builder =
                     QueryBuilders.multiMatchQuery(query).field("collector.default", 1.0f).type(MultiMatchQueryBuilder.Type.CROSS_FIELDS).prefixLength(2).analyzer("search_ngram").minimumShouldMatch("100%");
 
@@ -76,7 +76,22 @@ public class PhotonQueryBuilder {
                 builder.field(String.format("collector.%s.ngrams", lang), lang.equals(language) ? 1.0f : 0.6f);
             }
 
-            collectorQuery = builder;
+            collectorQuery = builder; 
+        } else {
+            collectorQuery = QueryBuilders.boolQuery()
+                    .should(QueryBuilders.matchQuery("collector.default", query)
+                            .fuzziness(fuzziness == 1 ? Fuzziness.ONE : Fuzziness.AUTO)
+                            .prefixLength(0)
+                            .operator(Operator.AND)
+                            .analyzer("search_ngram")
+                            .minimumShouldMatch("80%"))
+                    .should(QueryBuilders.matchQuery(String.format("collector.%s.ngrams", language), query)
+                            .fuzziness(fuzziness == 1 ? Fuzziness.ONE : Fuzziness.AUTO)
+                            .prefixLength(0)
+                            .operator(Operator.AND)
+                            .analyzer("search_ngram")
+                            .minimumShouldMatch("50%"))
+                    .minimumShouldMatch("80%");
         }
 
         query4QueryBuilder.must(collectorQuery);
@@ -99,7 +114,7 @@ public class PhotonQueryBuilder {
         String defLang = "default".equals(language) ? languages[0] : language;
         MultiMatchQueryBuilder nameNgramQuery = QueryBuilders.multiMatchQuery(query)
                 .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-                .fuzziness(lenient ? Fuzziness.ONE : Fuzziness.ZERO)
+                .fuzziness(Fuzziness.ONE)
                 .analyzer("search_ngram");
 
         for (String lang: languages) {
@@ -149,8 +164,8 @@ public class PhotonQueryBuilder {
      * @param language
      * @return An initialized {@link PhotonQueryBuilder photon query builder}.
      */
-    public static PhotonQueryBuilder builder(String query, String language, String[] languages, boolean lenient) {
-        return new PhotonQueryBuilder(query, language, languages, lenient);
+    public static PhotonQueryBuilder builder(String query, String language, String[] languages, boolean lenient, int fuzziness) {
+        return new PhotonQueryBuilder(query, language, languages, lenient, fuzziness);
     }
 
     public PhotonQueryBuilder withLocationBias(Point point, double scale, int zoom) {
