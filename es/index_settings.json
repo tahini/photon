@@ -26,6 +26,10 @@
 					"asciifolding"
 				]
 			},
+			"search_soundex": {
+				"tokenizer": "standard",
+				"filter" : ["standard", "lowercase", "soundex_filter"]
+			},
 			"index_raw": {
 				"char_filter": [
 					"punctuationgreedy"
@@ -100,7 +104,13 @@
 			"preserving_word_delimiter": { 
 				"type": "word_delimiter",
 				"preserve_original": "true"
+			},
+			"soundex_filter": {
+				"type": "phonetic",
+				"encoder": "soundex",
+				"replace": true
 			}
+
 		}
 	}
 }

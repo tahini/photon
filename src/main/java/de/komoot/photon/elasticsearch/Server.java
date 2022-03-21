@@ -78,12 +78,11 @@ public class Server {
     }
 
     public Server start(String clusterName, String[] transportAddresses) {
-        Settings.Builder sBuilder = Settings.builder();
-        sBuilder.put("path.home", this.esDirectory.toString());
-        sBuilder.put("network.host", "127.0.0.1"); // http://stackoverflow.com/a/15509589/1245622
-        sBuilder.put("cluster.name", clusterName);
 
         if (transportAddresses.length > 0) {
+            Settings.Builder sBuilder = Settings.builder();
+            sBuilder.put("path.home", this.esDirectory.toString());
+            sBuilder.put("cluster.name", clusterName);
             TransportClient trClient = new PreBuiltTransportClient(sBuilder.build());
             for (String tAddr : transportAddresses) {
                 int index = tAddr.indexOf(":");
@@ -101,6 +100,10 @@ public class Server {
             log.info("Started elastic search client connected to " + transportAddresses);
 
         } else {
+            Settings.Builder sBuilder = Settings.builder();
+            sBuilder.put("path.home", this.esDirectory.toString());
+            sBuilder.put("network.host", "127.0.0.1"); // http://stackoverflow.com/a/15509589/1245622
+            sBuilder.put("cluster.name", clusterName);
 
             try {
                 sBuilder.put("transport.type", "netty4").put("http.type", "netty4").put("http.enabled", "true");

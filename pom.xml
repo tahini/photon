@@ -216,6 +216,15 @@
                     <artifactItems>
                         <artifactItem>
                             <groupId>org.codelibs.elasticsearch.module</groupId>
+                            <artifactId>analysis-phonetic</artifactId>
+                            <version>${elasticsearch.version}</version>
+                            <type>jar</type>
+                            <overWrite>false</overWrite>
+                            <outputDirectory>${project.build.directory}/es/modules/analysis-phonetic</outputDirectory>
+                            <destFileName>lang-painless.jar</destFileName>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>org.codelibs.elasticsearch.module</groupId>
                             <artifactId>lang-painless</artifactId>
                             <version>${elasticsearch.version}</version>
                             <type>jar</type>
