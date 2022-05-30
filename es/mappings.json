@@ -30,7 +30,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						}
 					}
 				}
@@ -94,7 +98,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						},
 						"copy_to": [
 							"collector.default"
@@ -118,7 +126,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						},
 						"copy_to": [
 							"collector.default"
@@ -131,7 +143,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						},
 						"copy_to": [
 							"collector.default"
@@ -144,7 +160,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						},
 						"copy_to": [
 							"collector.default"
@@ -157,7 +177,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						},
 						"copy_to": [
 							"collector.default"
@@ -170,7 +194,11 @@
 							"raw": {
 								"type": "text",
 								"analyzer": "index_raw"
-							}
+							},
+                            "phonetic": {
+                                "type": "text",
+                                "analyzer": "index_soundex"
+                            }
 						},
 						"copy_to": [
 							"collector.default"

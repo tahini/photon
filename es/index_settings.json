@@ -26,9 +26,25 @@
 					"asciifolding"
 				]
 			},
+            "index_soundex": {
+				"tokenizer": "standard",
+				"filter" : [
+                    "standard", 
+                    "lowercase", 
+                    "asciifolding", 
+                    "soundex_filter"
+                ],
+				"type": "custom"
+			},
 			"search_soundex": {
 				"tokenizer": "standard",
-				"filter" : ["standard", "lowercase", "soundex_filter"]
+				"filter" : [
+                    "standard", 
+                    "lowercase", 
+                    "asciifolding", 
+                    "soundex_filter"
+                ],
+				"type": "custom"
 			},
 			"index_raw": {
 				"char_filter": [
@@ -107,10 +123,12 @@
 			},
 			"soundex_filter": {
 				"type": "phonetic",
-				"encoder": "soundex",
-				"replace": true
+				"encoder": "beider_morse",
+                "languageset":[
+                    "french",
+                    "english"
+                ]
 			}
-
 		}
 	}
 }
