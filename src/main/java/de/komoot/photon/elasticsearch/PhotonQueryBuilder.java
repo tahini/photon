@@ -70,7 +70,12 @@ public class PhotonQueryBuilder {
                     .minimumShouldMatch("1");
         } else if (fuzziness == 0) {
             MultiMatchQueryBuilder builder =
-                    QueryBuilders.multiMatchQuery(query).field("collector.default", 1.0f).type(MultiMatchQueryBuilder.Type.CROSS_FIELDS).prefixLength(2).analyzer("search_ngram").minimumShouldMatch("100%");
+                    QueryBuilders.multiMatchQuery(query)
+                            .field("collector.default", 1.0f)
+                            .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
+                            .prefixLength(2)
+                            .analyzer("search_ngram")
+                            .minimumShouldMatch("100%");
 
             for (String lang : languages) {
                 builder.field(String.format("collector.%s.ngrams", lang), lang.equals(language) ? 1.0f : 0.6f);
@@ -79,6 +84,13 @@ public class PhotonQueryBuilder {
             collectorQuery = builder; 
         } else {
             collectorQuery = QueryBuilders.boolQuery()
+                    .must(QueryBuilders.matchQuery("collector.default.phonetic", query)
+                            .fuzziness(Fuzziness.ZERO)
+                            .prefixLength(0)
+                            .operator(Operator.AND)
+                            .analyzer("search_soundex")
+                            .boost(10000)
+                            .minimumShouldMatch("50%"))
                     .should(QueryBuilders.matchQuery("collector.default", query)
                             .fuzziness(fuzziness == 1 ? Fuzziness.ONE : Fuzziness.AUTO)
                             .prefixLength(0)
@@ -91,7 +103,7 @@ public class PhotonQueryBuilder {
                             .operator(Operator.AND)
                             .analyzer("search_ngram")
                             .minimumShouldMatch("50%"))
-                    .minimumShouldMatch("80%");
+                    .minimumShouldMatch("10%");
         }
 
         query4QueryBuilder.must(collectorQuery);
