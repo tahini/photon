@@ -103,7 +103,7 @@ public class PhotonQueryBuilder {
                             .operator(Operator.AND)
                             .analyzer("search_ngram")
                             .minimumShouldMatch("50%"))
-                    .minimumShouldMatch("10%");
+                    .minimumShouldMatch("1%");
         }
 
         query4QueryBuilder.must(collectorQuery);
