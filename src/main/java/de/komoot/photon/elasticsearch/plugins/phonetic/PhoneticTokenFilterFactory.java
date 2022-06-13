@@ -40,7 +40,7 @@ public class PhoneticTokenFilterFactory extends AbstractTokenFilterFactory {
     private final Encoder encoder;
     private final boolean replace;
     private int maxcodelength;
-    private String[] languageset;
+    private List<String> languageset;
     private NameType nametype;
     private RuleType ruletype;
     private boolean isDaitchMokotoff;
@@ -77,7 +77,8 @@ public class PhoneticTokenFilterFactory extends AbstractTokenFilterFactory {
             || "beider_morse".equalsIgnoreCase(encodername)
             || "beidermorse".equalsIgnoreCase(encodername)) {
                 this.encoder = null;
-                this.languageset = settings.getAsArray("languageset");
+                String[] languages = settings.getAsArray("languageset");
+                this.languageset = Arrays.asList(languages);
                 String ruleType = settings.get("rule_type", "approx");
                 if ("approx".equalsIgnoreCase(ruleType)) {
                     ruletype = RuleType.APPROX;
@@ -116,12 +117,8 @@ public class PhoneticTokenFilterFactory extends AbstractTokenFilterFactory {
             }
             if (ruletype != null && nametype != null) {
                 LanguageSet langset = null;
-                if (languageset == null) {
-                    // by default, languages are english and french
-                    this.languageset = new String[] {"english", "french"};
-                    langset = LanguageSet.from(new HashSet<>(Arrays.asList(languageset)));
-                } else if (languageset != null && languageset.length > 0) {
-                    langset = LanguageSet.from(new HashSet<>(Arrays.asList(languageset)));
+                if (languageset != null && languageset.size() > 0) {
+                    langset = LanguageSet.from(new HashSet<>(languageset));
                 }
                 return new BeiderMorseFilter(tokenStream, new PhoneticEngine(nametype, ruletype, true), langset);
             }
