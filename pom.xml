@@ -46,6 +46,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency><!-- dependency for analysis-phonetic plugin-->
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+        <dependency><!-- dependency for analysis-phonetic plugin-->
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-phonetic</artifactId>
+            <version>8.11.1</version>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -198,60 +208,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-painless</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>org.codelibs.elasticsearch.module</groupId>
-                            <artifactId>analysis-phonetic</artifactId>
-                            <version>${elasticsearch.version}</version>
-                            <type>jar</type>
-                            <overWrite>false</overWrite>
-                            <outputDirectory>${project.build.directory}/es/modules/analysis-phonetic</outputDirectory>
-                            <destFileName>lang-painless.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>org.codelibs.elasticsearch.module</groupId>
-                            <artifactId>lang-painless</artifactId>
-                            <version>${elasticsearch.version}</version>
-                            <type>jar</type>
-                            <overWrite>false</overWrite>
-                            <outputDirectory>${project.build.directory}/es/modules/lang-painless</outputDirectory>
-                            <destFileName>lang-painless.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>org.ow2.asm</groupId>
-                            <artifactId>asm-debug-all</artifactId>
-                            <version>5.1</version>
-                            <type>jar</type>
-                            <overWrite>false</overWrite>
-                            <outputDirectory>${project.build.directory}/es/modules/lang-painless</outputDirectory>
-                            <destFileName>asm-debug-all.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>org.antlr</groupId>
-                            <artifactId>antlr4-runtime</artifactId>
-                            <version>4.5.1-1</version>
-                            <type>jar</type>
-                            <overWrite>false</overWrite>
-                            <outputDirectory>${project.build.directory}/es/modules/lang-painless</outputDirectory>
-                            <destFileName>antlr4-runtime.jar</destFileName>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

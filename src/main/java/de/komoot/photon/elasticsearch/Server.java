@@ -5,6 +5,7 @@ import de.komoot.photon.Importer;
 import de.komoot.photon.Updater;
 import de.komoot.photon.searcher.ReverseHandler;
 import de.komoot.photon.searcher.SearchHandler;
+import de.komoot.photon.elasticsearch.plugins.phonetic.AnalysisPhoneticPlugin;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import org.elasticsearch.action.get.GetResponse;
@@ -110,6 +111,8 @@ public class Server {
                 Settings settings = sBuilder.build();
                 Collection<Class<? extends Plugin>> lList = new LinkedList<>();
                 lList.add(Netty4Plugin.class);
+                // add analysis-phonetic plugin
+                lList.add(AnalysisPhoneticPlugin.class);
                 esNode = new MyNode(settings, lList);
                 esNode.start();
 
