@@ -89,7 +89,7 @@ public class PhotonQueryBuilder {
                             .prefixLength(0)
                             .operator(Operator.AND)
                             .analyzer("search_soundex")
-                            .boost(10000)
+                            .boost(10)
                             .minimumShouldMatch("50%"))
                     .should(QueryBuilders.matchQuery("collector.default", query)
                             .fuzziness(fuzziness == 1 ? Fuzziness.ONE : Fuzziness.AUTO)
@@ -103,7 +103,7 @@ public class PhotonQueryBuilder {
                             .operator(Operator.AND)
                             .analyzer("search_ngram")
                             .minimumShouldMatch("50%"))
-                    .minimumShouldMatch("1%");
+                    .minimumShouldMatch("0%");
         }
 
         query4QueryBuilder.must(collectorQuery);
